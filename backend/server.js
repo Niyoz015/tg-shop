@@ -4,21 +4,21 @@ const cors = require('cors');
 const crypto = require('crypto');
 const TelegramBot = require('node-telegram-bot-api');
 const path = require('path');
-
+ 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
-
+ 
 const BOT_TOKEN  = process.env.BOT_TOKEN;
 const WEBAPP_URL = process.env.WEBAPP_URL;
-
+ 
 // ── Admin va operatorlar ───────────────────────────────────────────────────────
 const ADMINS    = [1250991811];          // admin ID lar
 const OPERATORS = [1250991811, 139869420]; // barcha xabar oladiganlar
-
+ 
 const bot = new TelegramBot(BOT_TOKEN, { polling: true });
-
+ 
 // ── Ma'lumotlar ───────────────────────────────────────────────────────────────
 const db = {
   products: [
@@ -28,17 +28,17 @@ const db = {
   ],
   orders: []
 };
-
+ 
 const PAYMENT_NAMES = { cash:'💵 Naqd pul', card:'💳 Plastik karta', click:'📱 Click', payme:'💚 Payme' };
 const DELIVERY_NAMES = { pickup:'🏪 O\'zi olib ketish', delivery:'🚚 Yetkazib berish' };
 let orderCounter = 1000;
-
+ 
 // ── Bot buyruqlari ────────────────────────────────────────────────────────────
 bot.onText(/\/start/, (msg) => {
   const id   = msg.chat.id;
   const name = msg.from.first_name || 'Mehmon';
   const isAdmin = ADMINS.includes(id);
-
+ 
   bot.sendMessage(id,
     `Assalomu alaykum, ${name}! 👋\n\n🛍 *LELIT HOME* — Premium Bed Linen\n\nYuqori sifatli postель to'plamlari bilan uyingizni bezating!`,
     {
@@ -52,12 +52,12 @@ bot.onText(/\/start/, (msg) => {
     }
   );
 });
-
+ 
 // ── Admin panel ───────────────────────────────────────────────────────────────
 bot.on('callback_query', async (q) => {
   const id   = q.message.chat.id;
   const data = q.data;
-
+ 
   if (data === 'admin_panel') {
     if (!ADMINS.includes(id)) { bot.answerCallbackQuery(q.id, { text: '❌ Ruxsat yo\'q' }); return; }
     const total   = db.orders.length;
@@ -81,7 +81,7 @@ bot.on('callback_query', async (q) => {
       }
     );
   }
-
+ 
   else if (data === 'admin_orders') {
     if (!ADMINS.includes(id)) return;
     bot.answerCallbackQuery(q.id);
@@ -92,7 +92,7 @@ bot.on('callback_query', async (q) => {
     ).join('\n');
     bot.sendMessage(id, `📋 *Oxirgi buyurtmalar:*\n\n${text}`, { parse_mode:'Markdown' });
   }
-
+ 
   else if (data === 'admin_pending') {
     if (!ADMINS.includes(id)) return;
     bot.answerCallbackQuery(q.id);
@@ -114,7 +114,7 @@ bot.on('callback_query', async (q) => {
       );
     });
   }
-
+ 
   else if (data.startsWith('confirm_')) {
     const oid = parseInt(data.split('_')[1]);
     const order = db.orders.find(o => o.id === oid);
@@ -134,7 +134,7 @@ bot.on('callback_query', async (q) => {
       );
     }
   }
-
+ 
   else if (data.startsWith('cancel_')) {
     const oid = parseInt(data.split('_')[1]);
     const order = db.orders.find(o => o.id === oid);
@@ -149,21 +149,21 @@ bot.on('callback_query', async (q) => {
     }
   }
 });
-
+ 
 // ── API: Mahsulotlar ──────────────────────────────────────────────────────────
 app.get('/api/products', (req, res) => res.json(db.products));
-
+ 
 // ── API: Buyurtma ─────────────────────────────────────────────────────────────
 app.post('/api/order', async (req, res) => {
   const { cart, subtotal, delivery, deliveryCost, total, payment, phone, initData, user } = req.body;
-
+ 
   let verifiedUser = user;
   if (initData && initData !== 'demo') {
     const check = verifyTg(initData, BOT_TOKEN);
     if (!check.valid) return res.status(403).json({ ok:false, error:'Invalid initData' });
     verifiedUser = check.user;
   }
-
+ 
   const order = {
     id: ++orderCounter,
     userId:   verifiedUser?.id || 0,
@@ -175,7 +175,7 @@ app.post('/api/order', async (req, res) => {
     status: '⏳ Kutilmoqda'
   };
   db.orders.push(order);
-
+ 
   const itemsText = cart.map(i => `• ${i.name} × ${i.qty} — ${(i.price*i.qty).toLocaleString()} so'm`).join('\n');
   const orderText =
     `🆕 *Yangi buyurtma #${order.id}*\n\n` +
@@ -186,7 +186,7 @@ app.post('/api/order', async (req, res) => {
     `${PAYMENT_NAMES[payment]||payment}\n` +
     (deliveryCost > 0 ? `🚚 Dostavka: ${deliveryCost.toLocaleString()} so'm\n` : '') +
     `💰 *Jami: ${total.toLocaleString()} so'm*`;
-
+ 
   // Barcha operatorlarga yuborish
   for (const opId of OPERATORS) {
     try {
@@ -199,7 +199,7 @@ app.post('/api/order', async (req, res) => {
       });
     } catch(e) { console.error('Operator xabar:', e.message); }
   }
-
+ 
   // Mijozga tasdiqlash
   if (verifiedUser?.id) {
     try {
@@ -209,17 +209,17 @@ app.post('/api/order', async (req, res) => {
       );
     } catch(e) { console.error('Mijoz xabar:', e.message); }
   }
-
+ 
   res.json({ ok:true, orderId:order.id });
 });
-
+ 
 // ── Admin API ─────────────────────────────────────────────────────────────────
 app.get('/api/orders', (req, res) => {
   if (req.headers['x-admin-secret'] !== process.env.ADMIN_SECRET)
     return res.status(403).json({ error:'Forbidden' });
   res.json(db.orders.slice().reverse());
 });
-
+ 
 // ── initData tekshirish ───────────────────────────────────────────────────────
 function verifyTg(initData, token) {
   try {
@@ -232,7 +232,7 @@ function verifyTg(initData, token) {
     return { valid, user: valid ? JSON.parse(params.get('user')||'{}') : null };
   } catch { return { valid:false, user:null }; }
 }
-
+ 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ LELIT HOME server: http://localhost:${PORT}`);
