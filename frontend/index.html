@@ -3,24 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Do'kon</title>
+  <title>LELIT HOME</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="grain"></div>
+
   <header class="header">
     <div class="header-inner">
-      <span class="logo">🛍 ShopBot</span>
-      <button class="cart-btn" id="cartBtn" onclick="openCart()">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <div class="logo">
+        <span class="logo-main">LELIT</span>
+        <span class="logo-sub">HOME</span>
+      </div>
+      <button class="cart-btn" id="cartBtn" onclick="openCart()" aria-label="Savat">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         <span class="cart-count" id="cartCount" style="display:none">0</span>
       </button>
     </div>
   </header>
 
+  <div class="hero">
+    <div class="hero-text">
+      <p class="hero-tagline">Premium uy jihozlari</p>
+      <h1 class="hero-title">Uyingizga<br><em>nafosatli</em> go'zallik</h1>
+    </div>
+  </div>
+
   <div class="categories" id="categories"></div>
 
   <div class="search-wrap">
+    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" class="search-input" id="searchInput" placeholder="Mahsulot qidirish..." oninput="filterProducts()">
   </div>
 
@@ -35,15 +50,15 @@
       </div>
       <div class="cart-items" id="cartItems"></div>
       <div class="cart-footer" id="cartFooter" style="display:none">
-        <div class="cart-total">
-          Jami: <strong id="cartTotal">0</strong> so'm
+        <div class="cart-total-row">
+          <span>Jami summa</span>
+          <strong id="cartTotal">0</strong>
         </div>
-        <button class="btn-order" id="orderBtn" onclick="placeOrder()">
-          Buyurtma berish
-        </button>
+        <button class="btn-order" id="orderBtn" onclick="placeOrder()">Buyurtma berish</button>
       </div>
       <div class="cart-empty" id="cartEmpty">
-        <p>🛒 Savat bo'sh</p>
+        <div class="empty-icon">◻</div>
+        <p>Savat bo'sh</p>
       </div>
     </div>
   </div>
@@ -56,6 +71,7 @@
     </div>
   </div>
 
+  <div class="toast" id="toast"></div>
   <script src="app.js"></script>
 </body>
 </html>
