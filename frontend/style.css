@@ -836,3 +836,36 @@ body {
 }
 /* eski hero-tagline va hero-title o'chirilgan */
 .hero-tagline, .hero-title, .hero-text { display: none; }
+
+/* ── BOTTOM NAV ──────────────────────────────────────────────────────────────── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(10,10,10,0.97);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(201,169,110,0.12);
+  display: flex;
+  padding: 8px 0 env(safe-area-inset-bottom, 8px);
+}
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 4px;
+  background: none;
+  border: none;
+  color: var(--gray2);
+  font-family: var(--font-body);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.nav-item.active, .nav-item:active { color: var(--gold); }
+.nav-item svg { transition: stroke 0.2s; }
+.nav-item.active svg { stroke: var(--gold); }
+
+body { padding-bottom: 80px; }

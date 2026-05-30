@@ -37,7 +37,7 @@ const DEMO_PRODUCTS = [
 ];
 
 const DELIVERY_FREE_FROM = 1000000; // 1 mln dan bepul dostavka
-const DELIVERY_PRICE = 15000;       // dostavka narxi
+const DELIVERY_PRICE = 30000;       // dostavka narxi
 
 let allProducts = [];
 let cart = [];
@@ -362,3 +362,54 @@ function haptic(t) {
   if (t==='light') tg.HapticFeedback.impactOccurred('light');
   if (t==='success') tg.HapticFeedback.notificationOccurred('success');
 }
+
+// ── Buyurtmalar tarixi ────────────────────────────────────────────────────────
+async function openMyOrders() {
+  const userId = tg?.initDataUnsafe?.user?.id;
+  const modal = document.getElementById('ordersModal');
+  const content = document.getElementById('ordersContent');
+  content.innerHTML = '<div style="padding:32px;text-align:center;color:var(--gray)">Yuklanmoqda...</div>';
+  openModal('ordersModal');
+
+  let orders = [];
+  if (userId) {
+    try {
+      const res = await fetch(`${API}/api/my-orders/${userId}`);
+      orders = await res.json();
+    } catch {}
+  } else {
+    // Demo rejim
+    orders = [];
+  }
+
+  if (!orders.length) {
+    content.innerHTML = `
+      <div style="padding:48px 20px;text-align:center;color:var(--gray)">
+        <div style="font-size:36px;margin-bottom:12px;opacity:0.3">📭</div>
+        <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase">Buyurtmalar yo'q</div>
+      </div>`;
+    return;
+  }
+
+  const statusColor = { '✅ Tasdiqlangan':'#4caf50', '❌ Bekor qilindi':'#f44336', '⏳ Kutilmoqda':'#c9a96e' };
+  content.innerHTML = orders.map(o => {
+    const items = o.items.map(i => `${i.name} ×${i.qty}`).join(', ');
+    const date  = new Date(o.date).toLocaleDateString('uz-UZ', { day:'numeric', month:'long' });
+    const color = statusColor[o.status] || 'var(--gold)';
+    return `
+    <div style="padding:14px 20px;border-bottom:1px solid rgba(201,169,110,0.08)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+        <span style="font-family:var(--font-display);font-size:15px;color:var(--white)">#${o.id}</span>
+        <span style="font-size:11px;color:${color};font-weight:500">${o.status}</span>
+      </div>
+      <div style="font-size:12px;color:var(--gray);margin-bottom:4px">${items}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:13px;color:var(--gold);font-weight:500">${fmt(o.total)}</span>
+        <span style="font-size:11px;color:var(--gray2)">${date}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+function closeMyOrders() { closeModal('ordersModal'); }
+
+function scrollToTop() { window.scrollTo({ top:0, behavior:'smooth' }); }
