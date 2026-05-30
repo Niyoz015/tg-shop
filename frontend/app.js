@@ -1,41 +1,19 @@
 const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
-const API = 'https://your-backend.railway.app'; // Railway URL ingizni kiriting
+const API = 'https://your-backend.railway.app';
 
-// ─── LELIT HOME mahsulotlari ─────────────────────────────────────────────────
 const DEMO_PRODUCTS = [
-  // YOTOQXONA
-  { id:1,  name:"Monarx krovat",         price:4850000,  oldPrice:5900000, category:"Yotoqxona",  emoji:"🛏", desc:"Italyan to'shak. O'lcham: 180×200. Charm qoplama, aylanadigan bosh qismi." },
-  { id:2,  name:"Ipak ko'rpato'shak",     price:1250000,  oldPrice:null,    category:"Yotoqxona",  emoji:"🌸", desc:"100% tabiiy ipak. Gippoallergen. 4 fasl uchun." },
-  { id:3,  name:"Tungi stol — Duo",       price:890000,   oldPrice:1100000, category:"Yotoqxona",  emoji:"🪔", desc:"Qora yong'oq daraxti. 2 ta tortma. Mis tutqichlar." },
-  { id:4,  name:"Gardirob — Noire",       price:6200000,  oldPrice:null,    category:"Yotoqxona",  emoji:"🚪", desc:"6 eshikli. Ko'zgu, ichki yoritish. O'lcham: 240×220." },
-  { id:5,  name:"Belbog' o'rindiq",       price:420000,   oldPrice:550000,  category:"Yotoqxona",  emoji:"🪑", desc:"Velyur to'shama. Oyoqlari metaldan. Ranglar: krema, ko'mir." },
-
-  // MEHMONXONA
-  { id:6,  name:"Loft divan — Velvet",    price:7900000,  oldPrice:9500000, category:"Mehmonxona", emoji:"🛋", desc:"4 o'rinlik. Velyur to'shama. Modulli. Ranglar: ko'k, yashil, qora." },
-  { id:7,  name:"Mramor kofe stoli",      price:2100000,  oldPrice:null,    category:"Mehmonxona", emoji:"◻",  desc:"Haqiqiy mramor ustligi. Metaldan oyoqlar. 90×50 sm." },
-  { id:8,  name:"Devor shami — Arc",      price:380000,   oldPrice:480000,  category:"Mehmonxona", emoji:"💡", desc:"Bukiluvchan qo'l. E27 patron. Qora metall. Skandinav uslub." },
-  { id:9,  name:"Gilam — Casablanca",     price:3400000,  oldPrice:null,    category:"Mehmonxona", emoji:"🟫", desc:"Handmade. Jundan to'qilgan. 200×300. Geometrik naqsh." },
-  { id:10, name:"Kitob javoni — Grid",    price:1850000,  oldPrice:2200000, category:"Mehmonxona", emoji:"📚", desc:"Ochiq modul tizimi. Qalin po'lat. Yong'oq taglik. 5 qavat." },
-  { id:11, name:"TV stend — Float",       price:2650000,  oldPrice:null,    category:"Mehmonxona", emoji:"📺", desc:"Devorga osiladigan. 180 sm. Yopiq va ochiq bo'limlar. LED." },
-
-  // OSHXONA
-  { id:12, name:"Oshxona stoli — Slab",   price:5100000,  oldPrice:6200000, category:"Oshxona",    emoji:"🍽", desc:"Mramor top, po'lat oyoqlar. 6 kishilik. 180×90." },
-  { id:13, name:"Stul — Murano",          price:680000,   oldPrice:null,    category:"Oshxona",    emoji:"🪑", desc:"Aylanuvchi o'rindiq. Charm to'shama. Mis oyoqlar. Jarayonli." },
-  { id:14, name:"Buyum javoni",           price:1450000,  oldPrice:1750000, category:"Oshxona",    emoji:"🫙", desc:"Shisha eshikli. Ichki yoritish. 3 qavat. Oq yoki qora." },
-  { id:15, name:"Barcha qozon to'plam",   price:920000,   oldPrice:null,    category:"Oshxona",    emoji:"🍳", desc:"8 ta qozon. Granit qoplama. Induktsiyon uchun. Kafolat 5 yil." },
-
-  // HAMMOM
-  { id:16, name:"Vannaxona javon",        price:1680000,  oldPrice:2000000, category:"Hammom",     emoji:"🪥", desc:"Temir-beton ustligi. Mis jo'mrak. O'rnatilgan yoritish." },
-  { id:17, name:"Bambuk aksesuarlar",     price:340000,   oldPrice:null,    category:"Hammom",     emoji:"🌿", desc:"7 ta to'plam: o'rikcha, qutichalar, sochiq ilgich, oyna." },
-  { id:18, name:"Havo filtri — Aria",     price:1950000,  oldPrice:2400000, category:"Hammom",     emoji:"💨", desc:"HEPA filtr. 3 bosqichli tozalash. Nozik dizayn. Tez-soz." },
-
-  // DEKORATSIYA
-  { id:19, name:"Bronza vaza — Trio",     price:760000,   oldPrice:null,    category:"Dekoratsiya",emoji:"🏺", desc:"Qo'lda quyilgan bronza. 3 xil balandlik: 20, 35, 50 sm." },
-  { id:20, name:"Ko'zgu — Arco",          price:1320000,  oldPrice:1600000, category:"Dekoratsiya",emoji:"🪞", desc:"Oval. Oltin ramka. 80×120. Devorga va oyoqda turadigan." },
-  { id:21, name:"Sun'iy o'simliklar",     price:290000,   oldPrice:null,    category:"Dekoratsiya",emoji:"🌿", desc:"Premium sifat. Fiddle leaf fig, Monstera, Cactus. Suvlamasiz." },
-  { id:22, name:"Shamlar to'plami",       price:185000,   oldPrice:240000,  category:"Dekoratsiya",emoji:"🕯", desc:"12 ta. Soya paxta va atirgul isirlari. Yonish 40 soat." },
+  {
+    id: 1,
+    name: "Postel Lelit — Qizil",
+    price: 450000,
+    oldPrice: null,
+    category: "Postel to'plamlari",
+    emoji: "🛏",
+    image: "https://i.ibb.co/Q3Cdq2JR/photo-2026-05-30-11-36-19.jpg",
+    desc: "Material: Supersatin. O'lcham: 180×200 sm. Yumshoq va nafis qizil rang. To'plam: choyshab, 2 ta yostiqcha qop."
+  },
 ];
 
 let allProducts = [];
@@ -89,11 +67,14 @@ function renderProducts(list) {
   grid.innerHTML = list.map((p, i) => {
     const inCart = cart.find(c => c.id === p.id);
     const discount = p.oldPrice ? Math.round((1 - p.price/p.oldPrice)*100) : 0;
+    const imgContent = p.image
+      ? `<img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+      : `<span style="font-size:52px">${p.emoji}</span>`;
     return `
-    <div class="product-card" style="animation-delay:${i*0.04}s" onclick="openDetail(${p.id})">
-      <div class="product-img">
+    <div class="product-card" style="animation-delay:${i*0.06}s" onclick="openDetail(${p.id})">
+      <div class="product-img" style="padding:0;overflow:hidden;">
         ${discount > 0 ? `<span class="product-badge">-${discount}%</span>` : ''}
-        ${p.emoji}
+        ${imgContent}
       </div>
       <div class="product-info">
         <div class="product-cat">${p.category}</div>
@@ -103,7 +84,7 @@ function renderProducts(list) {
           ${p.oldPrice ? `<span class="product-old-price">${fmt(p.oldPrice)}</span>` : ''}
         </div>
         <button class="add-btn ${inCart ? 'in-cart' : ''}" onclick="event.stopPropagation();toggleCart(${p.id})">
-          ${inCart ? `✓ Savatda` : '+ Qo\'shish'}
+          ${inCart ? `✓ Savatda` : "+ Qo'shish"}
         </button>
       </div>
     </div>`;
@@ -115,8 +96,11 @@ function openDetail(id) {
   if (!p) return;
   const inCart = cart.find(c => c.id === p.id);
   const discount = p.oldPrice ? Math.round((1 - p.price/p.oldPrice)*100) : 0;
+  const imgContent = p.image
+    ? `<img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+    : `<span style="font-size:88px">${p.emoji}</span>`;
   document.getElementById('detailContent').innerHTML = `
-    <div class="detail-img">${p.emoji}</div>
+    <div class="detail-img" style="padding:0;overflow:hidden;">${imgContent}</div>
     <div class="detail-body">
       <div class="detail-cat">${p.category}${discount > 0 ? ` · -${discount}%` : ''}</div>
       <div class="detail-name">${p.name}</div>
@@ -126,7 +110,7 @@ function openDetail(id) {
       </div>
       <div class="detail-desc">${p.desc||''}</div>
       <button class="detail-add-btn ${inCart?'in-cart':''}" onclick="toggleCart(${p.id});closeDetail()">
-        ${inCart ? '✓ Savatda' : 'Savatga qo\'shish'}
+        ${inCart ? '✓ Savatda' : "Savatga qo'shish"}
       </button>
     </div>`;
   openModal('detailModal');
@@ -143,7 +127,7 @@ function toggleCart(id) {
     haptic('light');
   } else {
     cart.splice(idx, 1);
-    showToast(`${p.name} olib tashlandi`);
+    showToast(`Olib tashlandi`);
   }
   updateCartBadge();
   renderProducts(getFilteredList());
@@ -189,7 +173,11 @@ function renderCart() {
   footer.style.display = 'block';
   el.innerHTML = cart.map(item => `
     <div class="cart-item">
-      <div class="cart-item-emoji">${item.emoji}</div>
+      <div class="cart-item-emoji" style="overflow:hidden;padding:0;">
+        ${item.image
+          ? `<img src="${item.image}" style="width:100%;height:100%;object-fit:cover;">`
+          : item.emoji}
+      </div>
       <div class="cart-item-info">
         <div class="cart-item-name">${item.name}</div>
         <div class="cart-item-price">${fmt(item.price * item.qty)}</div>
@@ -201,7 +189,7 @@ function renderCart() {
       </div>
     </div>`).join('');
   const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
-  document.getElementById('cartTotal').textContent = fmt(total) + ' so\'m';
+  document.getElementById('cartTotal').textContent = fmt(total);
 }
 
 async function placeOrder() {
@@ -262,7 +250,7 @@ function showToast(msg) {
   t._t = setTimeout(() => t.classList.remove('show'), 2000);
 }
 function showSkeletons() {
-  document.getElementById('productsGrid').innerHTML = Array(6).fill(`
+  document.getElementById('productsGrid').innerHTML = Array(2).fill(`
     <div class="product-card">
       <div class="skeleton" style="aspect-ratio:1;width:100%"></div>
       <div style="padding:12px 14px">
