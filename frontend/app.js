@@ -1,7 +1,7 @@
 const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); }
 
-const API = 'https://your-backend.railway.app';
+const API = 'https://tg-shop-production-b693.up.railway.app';
 
 const DEMO_PRODUCTS = [
   {
