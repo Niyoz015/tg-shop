@@ -660,3 +660,80 @@ body {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+/* ── DOSTAVKA VA TO'LOV OPSIYALARI ─────────────────────────────────────────── */
+.section-title {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  padding: 16px 20px 8px;
+  font-family: var(--font-body);
+}
+.option-group {
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.option-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(201,169,110,0.15);
+  border-radius: var(--radius);
+  background: var(--black3);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.option-btn.active {
+  border-color: var(--gold);
+  background: rgba(201,169,110,0.07);
+}
+.opt-icon { font-size: 20px; flex-shrink: 0; }
+.opt-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--white);
+  font-family: var(--font-body);
+}
+.opt-sub {
+  font-size: 11px;
+  color: var(--gray);
+  margin-top: 2px;
+}
+.phone-input {
+  width: calc(100% - 40px);
+  margin: 0 20px 16px;
+  padding: 12px 14px;
+  background: var(--black3);
+  border: 1px solid rgba(201,169,110,0.15);
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-family: var(--font-body);
+  color: var(--white);
+  outline: none;
+  display: block;
+}
+.phone-input:focus { border-color: rgba(201,169,110,0.4); }
+.phone-input::placeholder { color: var(--gray2); }
+
+/* TOTAL */
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--gray);
+  margin-bottom: 6px;
+  font-family: var(--font-body);
+}
+.total-final {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(201,169,110,0.15);
+}

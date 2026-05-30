@@ -14,11 +14,37 @@ const DEMO_PRODUCTS = [
     image: "https://i.ibb.co/Q3Cdq2JR/photo-2026-05-30-11-36-19.jpg",
     desc: "Material: Supersatin. O'lcham: 180×200 sm. Yumshoq va nafis qizil rang. To'plam: choyshab, 2 ta yostiqcha qop."
   },
+  {
+    id: 2,
+    name: "Lelit Kolleksiya — Quticha",
+    price: 320000,
+    oldPrice: null,
+    category: "Postel to'plamlari",
+    emoji: "🛏",
+    image: "https://i.ibb.co/FkQw3v04/photo-2026-05-30-14-32-03.jpg",
+    desc: "Material: Supersatin. O'lcham: 160×200 sm. Chiroyli qadoqlangan. To'plam: choyshab, 2 ta yostiqcha qop."
+  },
+  {
+    id: 3,
+    name: "Lelit Kolleksiya — Shaftoli",
+    price: 320000,
+    oldPrice: null,
+    category: "Postel to'plamlari",
+    emoji: "🛏",
+    image: "https://i.ibb.co/7NBgJBzK/photo-2026-05-30-14-32-08.jpg",
+    desc: "Material: Supersatin. O'lcham: 160×200 sm. Nafis shaftoli rang. To'plam: choyshab, 2 ta yostiqcha qop."
+  },
 ];
+
+const DELIVERY_FREE_FROM = 1000000; // 1 mln dan bepul dostavka
+const DELIVERY_PRICE = 30000;       // dostavka narxi
 
 let allProducts = [];
 let cart = [];
 let activeCategory = 'Hammasi';
+let selectedDelivery = 'pickup'; // pickup | delivery
+let selectedPayment = 'cash';    // cash | card | click | payme
+let userPhone = '';
 
 document.addEventListener('DOMContentLoaded', async () => {
   showSkeletons();
@@ -84,7 +110,7 @@ function renderProducts(list) {
           ${p.oldPrice ? `<span class="product-old-price">${fmt(p.oldPrice)}</span>` : ''}
         </div>
         <button class="add-btn ${inCart ? 'in-cart' : ''}" onclick="event.stopPropagation();toggleCart(${p.id})">
-          ${inCart ? `✓ Savatda` : "+ Qo'shish"}
+          ${inCart ? '✓ Savatda' : "+ Qo'shish"}
         </button>
       </div>
     </div>`;
@@ -127,7 +153,7 @@ function toggleCart(id) {
     haptic('light');
   } else {
     cart.splice(idx, 1);
-    showToast(`Olib tashlandi`);
+    showToast('Olib tashlandi');
   }
   updateCartBadge();
   renderProducts(getFilteredList());
@@ -159,6 +185,13 @@ function updateCartBadge() {
 function openCart() { renderCart(); openModal('cartModal'); }
 function closeCart() { closeModal('cartModal'); }
 
+function getSubtotal() { return cart.reduce((s, c) => s + c.price * c.qty, 0); }
+function getDeliveryCost() {
+  if (selectedDelivery === 'pickup') return 0;
+  return getSubtotal() >= DELIVERY_FREE_FROM ? 0 : DELIVERY_PRICE;
+}
+function getTotal() { return getSubtotal() + getDeliveryCost(); }
+
 function renderCart() {
   const el = document.getElementById('cartItems');
   const footer = document.getElementById('cartFooter');
@@ -171,6 +204,7 @@ function renderCart() {
   }
   empty.style.display = 'none';
   footer.style.display = 'block';
+
   el.innerHTML = cart.map(item => `
     <div class="cart-item">
       <div class="cart-item-emoji" style="overflow:hidden;padding:0;">
@@ -188,18 +222,89 @@ function renderCart() {
         <button class="qty-btn" onclick="changeQty(${item.id},+1)">+</button>
       </div>
     </div>`).join('');
-  const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
-  document.getElementById('cartTotal').textContent = fmt(total);
+
+  // Dostavka tanlash
+  const sub = getSubtotal();
+  const delivFree = sub >= DELIVERY_FREE_FROM;
+  el.innerHTML += `
+    <div class="section-title">Yetkazib berish</div>
+    <div class="option-group">
+      <div class="option-btn ${selectedDelivery==='pickup'?'active':''}" onclick="setDelivery('pickup')">
+        <span class="opt-icon">🏪</span>
+        <div class="opt-body">
+          <div class="opt-name">O'zi olib ketish</div>
+          <div class="opt-sub">Do'kondan bepul</div>
+        </div>
+      </div>
+      <div class="option-btn ${selectedDelivery==='delivery'?'active':''}" onclick="setDelivery('delivery')">
+        <span class="opt-icon">🚚</span>
+        <div class="opt-body">
+          <div class="opt-name">Yetkazib berish</div>
+          <div class="opt-sub">${delivFree ? '✓ Bepul (1 mln dan oshdi)' : fmt(DELIVERY_PRICE) + ' · 1 mln dan bepul'}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">To'lov turi</div>
+    <div class="option-group">
+      <div class="option-btn ${selectedPayment==='cash'?'active':''}" onclick="setPayment('cash')">
+        <span class="opt-icon">💵</span>
+        <div class="opt-body"><div class="opt-name">Naqd pul</div></div>
+      </div>
+      <div class="option-btn ${selectedPayment==='card'?'active':''}" onclick="setPayment('card')">
+        <span class="opt-icon">💳</span>
+        <div class="opt-body"><div class="opt-name">Plastik karta</div></div>
+      </div>
+      <div class="option-btn ${selectedPayment==='click'?'active':''}" onclick="setPayment('click')">
+        <span class="opt-icon">📱</span>
+        <div class="opt-body"><div class="opt-name">Click</div></div>
+      </div>
+      <div class="option-btn ${selectedPayment==='payme'?'active':''}" onclick="setPayment('payme')">
+        <span class="opt-icon">💚</span>
+        <div class="opt-body"><div class="opt-name">Payme</div></div>
+      </div>
+    </div>
+
+    <div class="section-title">Telefon raqam</div>
+    <input class="phone-input" id="phoneInput" type="tel" placeholder="+998 90 000 00 00"
+      value="${userPhone}" oninput="userPhone=this.value">
+  `;
+
+  const delivCost = getDeliveryCost();
+  document.getElementById('cartTotal').innerHTML = `
+    <div class="total-row"><span>Mahsulotlar</span><span>${fmt(sub)}</span></div>
+    ${selectedDelivery==='delivery' ? `<div class="total-row"><span>Dostavka</span><span>${delivCost===0?'Bepul':fmt(delivCost)}</span></div>` : ''}
+    <div class="total-row total-final"><span>Jami</span><span>${fmt(getTotal())}</span></div>
+  `;
+}
+
+function setDelivery(type) {
+  selectedDelivery = type;
+  renderCart();
+}
+function setPayment(type) {
+  selectedPayment = type;
+  renderCart();
 }
 
 async function placeOrder() {
   if (!cart.length) return;
+  const phone = document.getElementById('phoneInput')?.value || userPhone;
+  if (!phone || phone.length < 9) {
+    showToast('Telefon raqamini kiriting!');
+    return;
+  }
   const btn = document.getElementById('orderBtn');
   btn.disabled = true;
   btn.textContent = 'Yuborilmoqda...';
   const orderData = {
     cart: cart.map(c => ({ id:c.id, name:c.name, price:c.price, qty:c.qty })),
-    total: cart.reduce((s,c) => s + c.price*c.qty, 0),
+    subtotal: getSubtotal(),
+    delivery: selectedDelivery,
+    deliveryCost: getDeliveryCost(),
+    total: getTotal(),
+    payment: selectedPayment,
+    phone,
     initData: tg?.initData || 'demo',
     user: tg?.initDataUnsafe?.user || { id:0, first_name:'Test' }
   };
@@ -209,8 +314,7 @@ async function placeOrder() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(orderData)
     });
-    const data = await res.json();
-    if (!data.ok) throw new Error();
+    await res.json();
   } catch {}
   cart = [];
   updateCartBadge();
@@ -220,10 +324,10 @@ async function placeOrder() {
 }
 
 function showSuccess() {
-  document.querySelector('.products-grid').style.display = 'none';
-  document.querySelector('.categories').style.display = 'none';
-  document.querySelector('.search-wrap').style.display = 'none';
-  document.querySelector('.hero').style.display = 'none';
+  ['products-grid','categories','search-wrap','hero'].forEach(c => {
+    const el = document.querySelector('.'+c) || document.getElementById(c);
+    if (el) el.style.display = 'none';
+  });
   const screen = document.createElement('div');
   screen.className = 'success-screen show';
   screen.innerHTML = `
@@ -234,23 +338,15 @@ function showSuccess() {
   if (tg) setTimeout(() => tg.close(), 3500);
 }
 
-function openModal(id) {
-  document.getElementById(id).classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-  document.body.style.overflow = '';
-}
+function openModal(id) { document.getElementById(id).classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._t);
-  t._t = setTimeout(() => t.classList.remove('show'), 2000);
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 2200);
 }
 function showSkeletons() {
-  document.getElementById('productsGrid').innerHTML = Array(2).fill(`
+  document.getElementById('productsGrid').innerHTML = Array(3).fill(`
     <div class="product-card">
       <div class="skeleton" style="aspect-ratio:1;width:100%"></div>
       <div style="padding:12px 14px">
