@@ -37,7 +37,7 @@ const DEMO_PRODUCTS = [
 ];
 
 const DELIVERY_FREE_FROM = 1000000; // 1 mln dan bepul dostavka
-const DELIVERY_PRICE = 30000;       // dostavka narxi
+const DELIVERY_PRICE = 15000;       // dostavka narxi
 
 let allProducts = [];
 let cart = [];
