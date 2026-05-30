@@ -6,7 +6,7 @@
   <title>LELIT HOME</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,28 +14,75 @@
 
   <header class="header">
     <div class="header-inner">
-      <div class="logo">
-        <span class="logo-main">LELIT</span>
-        <span class="logo-sub">HOME</span>
+      <!-- LOGO -->
+      <div class="logo-wrap">
+        <div class="logo-icon">
+          <svg width="28" height="28" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="30" cy="30" r="28" stroke="#c9a96e" stroke-width="1.5" fill="none"/>
+            <circle cx="30" cy="30" r="22" stroke="#c9a96e" stroke-width="0.5" fill="none" opacity="0.4"/>
+            <!-- cotton flower -->
+            <ellipse cx="30" cy="24" rx="4" ry="6" fill="#c9a96e" opacity="0.9"/>
+            <ellipse cx="36" cy="27" rx="4" ry="6" fill="#c9a96e" opacity="0.75" transform="rotate(60 36 27)"/>
+            <ellipse cx="36" cy="33" rx="4" ry="6" fill="#c9a96e" opacity="0.75" transform="rotate(120 36 33)"/>
+            <ellipse cx="30" cy="36" rx="4" ry="6" fill="#c9a96e" opacity="0.9" transform="rotate(180 30 36)"/>
+            <ellipse cx="24" cy="33" rx="4" ry="6" fill="#c9a96e" opacity="0.75" transform="rotate(240 24 33)"/>
+            <ellipse cx="24" cy="27" rx="4" ry="6" fill="#c9a96e" opacity="0.75" transform="rotate(300 24 27)"/>
+            <circle cx="30" cy="30" r="5" fill="#0a0a0a" stroke="#c9a96e" stroke-width="1"/>
+            <circle cx="30" cy="30" r="2.5" fill="#c9a96e"/>
+            <!-- stem -->
+            <line x1="30" y1="40" x2="30" y2="50" stroke="#c9a96e" stroke-width="1" opacity="0.6"/>
+            <line x1="30" y1="45" x2="26" y2="42" stroke="#c9a96e" stroke-width="1" opacity="0.6"/>
+            <line x1="30" y1="47" x2="34" y2="44" stroke="#c9a96e" stroke-width="1" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="logo-text-wrap">
+          <span class="logo-main">LELIT HOME</span>
+          <span class="logo-sub">PREMIUM BED LINEN</span>
+        </div>
       </div>
+
       <button class="cart-btn" id="cartBtn" onclick="openCart()" aria-label="Savat">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
         <span class="cart-count" id="cartCount" style="display:none">0</span>
       </button>
     </div>
   </header>
 
+  <!-- HERO -->
   <div class="hero">
-    <div class="hero-text">
-      <p class="hero-tagline">Premium uy jihozlari</p>
-      <h1 class="hero-title">Uyingizga<br><em>nafosatli</em> go'zallik</h1>
+    <div class="hero-logo-big">
+      <svg width="72" height="72" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="30" r="28" stroke="#c9a96e" stroke-width="1" fill="none"/>
+        <circle cx="30" cy="30" r="22" stroke="#c9a96e" stroke-width="0.4" fill="none" opacity="0.3"/>
+        <ellipse cx="30" cy="24" rx="4" ry="6" fill="#c9a96e" opacity="0.9"/>
+        <ellipse cx="36" cy="27" rx="4" ry="6" fill="#c9a96e" opacity="0.75" transform="rotate(60 36 27)"/>
+        <ellipse cx="36" cy="33" rx="4" ry="6" fill="#c9a96e" opacity="0.75" transform="rotate(120 36 33)"/>
+        <ellipse cx="30" cy="36" rx="4" ry="6" fill="#c9a96e" opacity="0.9" transform="rotate(180 30 36)"/>
+        <ellipse cx="24" cy="33" rx="4" ry="6" fill="#c9a96e" opacity="0.75" transform="rotate(240 24 33)"/>
+        <ellipse cx="24" cy="27" rx="4" ry="6" fill="#c9a96e" opacity="0.75" transform="rotate(300 24 27)"/>
+        <circle cx="30" cy="30" r="5" fill="#0a0a0a" stroke="#c9a96e" stroke-width="1"/>
+        <circle cx="30" cy="30" r="2.5" fill="#c9a96e"/>
+        <line x1="30" y1="40" x2="30" y2="50" stroke="#c9a96e" stroke-width="1" opacity="0.5"/>
+        <line x1="30" y1="45" x2="26" y2="42" stroke="#c9a96e" stroke-width="1" opacity="0.5"/>
+        <line x1="30" y1="47" x2="34" y2="44" stroke="#c9a96e" stroke-width="1" opacity="0.5"/>
+      </svg>
     </div>
+    <div class="hero-divider"></div>
+    <h1 class="hero-brand">LELIT HOME</h1>
+    <p class="hero-slogan">— PREMIUM BED LINEN —</p>
+    <p class="hero-desc">Yuqori sifatli postel to'plamlari bilan<br>uyingizga hashamat va qulaylik olib keling</p>
   </div>
 
   <div class="categories" id="categories"></div>
 
   <div class="search-wrap">
-    <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
     <input type="text" class="search-input" id="searchInput" placeholder="Mahsulot qidirish..." oninput="filterProducts()">
   </div>
 
@@ -50,10 +97,7 @@
       </div>
       <div class="cart-items" id="cartItems"></div>
       <div class="cart-footer" id="cartFooter" style="display:none">
-        <div class="cart-total-row">
-          <span>Jami summa</span>
-          <strong id="cartTotal">0</strong>
-        </div>
+        <div id="cartTotal"></div>
         <button class="btn-order" id="orderBtn" onclick="placeOrder()">Buyurtma berish</button>
       </div>
       <div class="cart-empty" id="cartEmpty">
