@@ -292,7 +292,7 @@ app.get('/api/products', (req, res) => res.json(db.products));
 
 // ── API: Buyurtma ─────────────────────────────────────────────────────────────
 app.post('/api/order', async (req, res) => {
-  const { cart, subtotal, delivery, deliveryCost, total, payment, phone, initData, user } = req.body;
+  const { cart, subtotal, delivery, deliveryCost, total, payment, phone, address, initData, user } = req.body;
 
   let verifiedUser = user;
   if (initData && initData !== 'demo') {
@@ -305,6 +305,7 @@ app.post('/api/order', async (req, res) => {
     userId:   verifiedUser?.id || 0,
     userName: verifiedUser?.first_name || 'Noma\'lum',
     phone:    phone || '—',
+    address:  address || null,
     items: cart,
     subtotal, delivery, deliveryCost, total, payment,
     date:   new Date().toISOString(),

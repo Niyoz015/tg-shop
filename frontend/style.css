@@ -869,3 +869,22 @@ body {
 .nav-item.active svg { stroke: var(--gold); }
 
 body { padding-bottom: 80px; }
+
+/* ── MANZIL MAYDONI ──────────────────────────────────────────────────────────── */
+.address-input {
+  height: 80px;
+  resize: none;
+  line-height: 1.5;
+  font-size: 14px;
+}
+.address-hint {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--gray2);
+  padding: 6px 20px 12px;
+  font-family: var(--font-body);
+  letter-spacing: 0.03em;
+}
+.address-hint svg { flex-shrink: 0; opacity: 0.6; }

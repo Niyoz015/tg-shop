@@ -45,6 +45,7 @@ let activeCategory = 'Hammasi';
 let selectedDelivery = 'pickup'; // pickup | delivery
 let selectedPayment = 'cash';    // cash | card | click | payme
 let userPhone = '';
+let userAddress = '';
 
 document.addEventListener('DOMContentLoaded', async () => {
   showSkeletons();
@@ -268,6 +269,17 @@ function renderCart() {
     <div class="section-title">Telefon raqam</div>
     <input class="phone-input" id="phoneInput" type="tel" placeholder="+998 90 000 00 00"
       value="${userPhone}" oninput="userPhone=this.value">
+
+    ${selectedDelivery === 'delivery' ? `
+    <div class="section-title">Yetkazib berish manzili</div>
+    <textarea class="phone-input address-input" id="addressInput"
+      placeholder="Shahar, ko'cha, uy raqami, mo'ljal..."
+      oninput="userAddress=this.value">${userAddress}</textarea>
+    <div class="address-hint">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      To'liq manzil kiriting: ko'cha, uy, xonadon
+    </div>
+    ` : ''}
   `;
 
   const delivCost = getDeliveryCost();
@@ -294,6 +306,12 @@ async function placeOrder() {
     showToast('Telefon raqamini kiriting!');
     return;
   }
+  const address = document.getElementById('addressInput')?.value || userAddress;
+  if (selectedDelivery === 'delivery' && (!address || address.trim().length < 5)) {
+    showToast('Yetkazib berish manzilini kiriting!');
+    document.getElementById('addressInput')?.focus();
+    return;
+  }
   const btn = document.getElementById('orderBtn');
   btn.disabled = true;
   btn.textContent = 'Yuborilmoqda...';
@@ -305,6 +323,7 @@ async function placeOrder() {
     total: getTotal(),
     payment: selectedPayment,
     phone,
+    address: selectedDelivery === 'delivery' ? address : null,
     initData: tg?.initData || 'demo',
     user: tg?.initDataUnsafe?.user || { id:0, first_name:'Test' }
   };
